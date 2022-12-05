@@ -19,6 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   dependency_manager: ^1.0.0
   dart_dev_utils: ^1.1.0
 
