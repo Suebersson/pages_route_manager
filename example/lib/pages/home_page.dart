@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
           color: Theme.of(context).primaryColor.withOpacity(0.7),
           child: TextButton(
             onPressed: (){
-          
+
               // Usando o navigator padrão do flutter
               // Navigator.of(context).pushNamed(
               //   RouteName.anyPage, 

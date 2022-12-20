@@ -138,7 +138,7 @@ class WidgetTransitionAnimation<T> extends StatelessWidget {
           return widget;
         }
       default:
-        return const SizedBox();
+        return const SizedBox.shrink();
     }
   }
 }

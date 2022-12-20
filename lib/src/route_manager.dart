@@ -22,6 +22,7 @@ part 'bind_page_builder.dart';
 */
 /* #######################  Responsabilidades dessa package ########################
   - Manter a navegação das rotas da app padrão do flutter(Navigator)
+  - Fornecer um base de código para facilitar gerenciamento e controle de rotas da app
   - Fornecer animações na transição de rotas/páginas
   - Fornecer o objeto Navigator, que pissibilitará a navegação sem o contexto desde que a variável 
     [RouteManager.routeManagerWatcher] esteja atribuida no [MaterialApp]
@@ -48,55 +49,56 @@ extension ImplementFunction<T> on BuildContext {
   }
 }
 
-abstract class RouteManager {
+abstract class RouteManager<T> {
   /// Navigator que será definida quando a rota inicial da app for carregada.
   /// O uso da mesma deve ser evitada, menos que o dev saiba como usa-lá
-  static NavigatorState? rootNavigator;
+  static NavigatorState? _rootNavigator;
+  static NavigatorState? get rootNavigator => _rootNavigator;
 
   /// Navigator que é atualizada a cada ação executada através na [MaterialApp.navigatorObservers]
   /// usando objeto [routeManagerWatcher]
-  static NavigatorState? currentNavigator;
+  static NavigatorState? _currentNavigator;
+  static NavigatorState? get currentNavigator => _currentNavigator;
+
+  /// Objeto route atual
+  static Route<dynamic>? _currentRoute;
+  static Route<dynamic>? get currentRoute => _currentRoute;
+
+  /// configurações da página atual
+  static RouteSettings? _currentRouteSettings;
+  static RouteSettings? get currentRouteSettings => _currentRouteSettings;
 
   /// Observar as transições das rotas
   static final NavigatorObserver routeManagerWatcher =
       RouteObserverProvider<PageRoute>(
     didPush_: ({required Route<dynamic> route, Route<dynamic>? previousRoute}) {
-      if (route is PageRoute) {
-        if (route.isFirst) {
-          rootNavigator = route.navigator;
-          currentNavigator = route.navigator;
-        } else {
-          currentNavigator = route.navigator;
-        }
-      }
+      _setNavigator(route);
     },
     didPop_: ({required Route<dynamic> route, Route<dynamic>? previousRoute}) {
-      if (previousRoute is PageRoute) {
-        currentNavigator = previousRoute.navigator;
-      }
+      _setNavigator(previousRoute);
     },
     didReplace_: ({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-      if (newRoute is PageRoute) {
-        if (newRoute.isFirst) {
-          rootNavigator = newRoute.navigator;
-          currentNavigator = newRoute.navigator;
-        } else {
-          currentNavigator = newRoute.navigator;
-        }
-      }
+      _setNavigator(newRoute);
     },
     didRemove_: (
         {required Route<dynamic> route, Route<dynamic>? previousRoute}) {
-      if (route is PageRoute) {
-        if (route.isFirst) {
-          rootNavigator = route.navigator;
-          currentNavigator = route.navigator;
-        } else {
-          currentNavigator = route.navigator;
-        }
-      }
+      _setNavigator(route);
     },
   );
+
+  static void _setNavigator(Route<dynamic>? route) {
+    if (route is PageRoute) {
+      _currentRoute = route;
+      _currentRouteSettings = route.settings;
+
+      if (route.isFirst) {
+        _rootNavigator = route.navigator;
+        _currentNavigator = route.navigator;
+      } else {
+        _currentNavigator = route.navigator;
+      }
+    }
+  }
 
   /// Página que será exibida quando o rota for desconhecida ou não existir.
   ///
