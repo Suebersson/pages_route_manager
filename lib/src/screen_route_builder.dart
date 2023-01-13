@@ -1,4 +1,4 @@
-part of 'route_manager.dart';
+part of './route_manager.dart';
 
 class ScreenRouteBuilder<T> extends PageRoute<T> {
   /// Este objeto[ScreenRouteBuilder] do tipo [Route] é uma versão

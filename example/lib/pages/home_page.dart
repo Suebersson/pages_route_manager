@@ -15,17 +15,29 @@ class HomePage extends StatelessWidget {
           color: Theme.of(context).primaryColor.withOpacity(0.7),
           child: TextButton(
             onPressed: (){
-
+              
               // Usando o navigator padrão do flutter
               // Navigator.of(context).pushNamed(
-              //   RouteName.anyPage, 
+              //   RouteName.anyPage.name, 
               //   arguments: 'data'
               // );
               
               // Sem o contexto usando o navigator da página ativa
               // RouteManager.currentNavigator?.pushNamed(
-              //   RouteName.anyPage, 
+              //   RouteName.anyPage.name, 
               //   arguments: 'data'
+              // );
+
+              // Sem o contexto usando o navigator da página ativa
+              // RouteManager.push(
+              //   builder: (_) => const AnyPage(), 
+              //   settings: const RouteSettings(name: 'Page2', arguments: 'argument')
+              // );
+
+              // Sem o contexto usando o navigator da página ativa
+              // RouteManager.pushNamed(
+              //   routeName: RouteName.anyPage.name,
+              //   arguments: 'argument'
               // );
 
               // Persolanizando uma animação para transição de uma página
@@ -46,7 +58,6 @@ class HomePage extends StatelessWidget {
               //   )
               // );
 
-          
             }, 
             child: const Text(
               'AnyPage',

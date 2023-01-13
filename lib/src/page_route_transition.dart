@@ -1,9 +1,9 @@
-part of 'route_manager.dart';
+part of './route_manager.dart';
 
 /// Tipos de objeto [Route] para transição da página
 abstract class PageRouteTransition {
   /// Transição para rotas/páginas [MaterialPageRoute] ou [CupertinoPageRoute]
-  static Route<T> flutterDefault<T>({
+  static Route<R> flutterDefault<R>({
     required WidgetBuilder builder,
     String? title, // Esse parâmetro se aplica apenas ao [CupertinoPageRoute]
     RouteSettings? settings,
@@ -14,7 +14,7 @@ abstract class PageRouteTransition {
   }) {
     switch (flutterDefaultTransition) {
       case FlutterDefaultTransition.cupertino:
-        return CupertinoPageRoute<T>(
+        return CupertinoPageRoute<R>(
           builder: builder,
           title: title,
           settings: settings,
@@ -22,7 +22,7 @@ abstract class PageRouteTransition {
           fullscreenDialog: fullscreenDialog,
         );
       default:
-        return MaterialPageRoute<T>(
+        return MaterialPageRoute<R>(
           builder: builder,
           settings: settings,
           maintainState: maintainState,
@@ -32,7 +32,7 @@ abstract class PageRouteTransition {
   }
 
   /// Transição personalizada para rotas/páginas
-  static Route<T> customized<T>({
+  static Route<R> customized<R>({
     required WidgetBuilder builder,
     RouteSettings? settings,
     TransitionType transitionType = TransitionType.slideWithScaleRightToLeft,
@@ -46,7 +46,7 @@ abstract class PageRouteTransition {
     bool maintainState = true,
     bool fullscreenDialog = false,
   }) {
-    return ScreenRouteBuilder<T>(
+    return ScreenRouteBuilder<R>(
       builder: builder,
       opaque: opaque,
       barrierDismissible: barrierDismissible,

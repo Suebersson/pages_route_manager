@@ -1,4 +1,4 @@
-part of 'route_manager.dart';
+part of './route_manager.dart';
 
 /// Widget responsável pela animação definida na transição das rostas
 @immutable

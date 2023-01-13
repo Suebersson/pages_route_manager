@@ -17,6 +17,6 @@ class StartApp extends StatelessWidget {
       navigatorObservers: [RouteManager.routeManagerWatcher],
       onGenerateRoute: AppRoutes.onGenerateRoute,
       onUnknownRoute: RouteManager.onUnknownRoute,
-    );
+    ).setAppRouteTransition(AppRoutes.appRouteTransition);
   }
 }

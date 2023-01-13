@@ -1,4 +1,4 @@
-part of 'route_manager.dart';
+part of './route_manager.dart';
 
 /// Página para exibir quando a rota nomeada não for encontrada ou não existir
 @immutable

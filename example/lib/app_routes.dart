@@ -1,7 +1,5 @@
 library app_route;
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pages_route_manager/pages_route_manager.dart';
 
@@ -35,7 +33,7 @@ class RouteModel {
 
 }
 
-extension AddRoute on RouteModel {
+extension RouteAttributes on RouteModel {
 
   String get name => _name;
   WidgetBuilder get builder => _builder;
@@ -49,7 +47,7 @@ extension AddRoute on RouteModel {
 
 /// Essa estrutura de código nos possibilita adicionar as rotas usando o objeto [RouteModel]
 /// dentro de [RouteName] sem precisar reescrever(repetir) o nome[String] e o construtor[WidgetBuilder]
-/// em outras classes ou objetos.
+/// em outras classes ou objetos. Basta apenas criar uma instância de [RouteModel] dentro de [RouteName]
 /// 
 /// E na medida que o número de rotas aumente na app, o objeto onGenerateRoute[RouteFactory]
 /// é dinâmico e não precisar ser alterado(fazer uma implementação)
@@ -58,20 +56,8 @@ abstract class AppRoutes {
   static final List<RouteModel> _listRoutes = [];
   static List<RouteModel> get listRoutes => [..._listRoutes];
 
-  static Future<O?> push<O extends Object?>(
-    {required WidgetBuilder builder, RouteSettings? settings}) async {
-
-    return RouteManager.currentNavigator?.push<O>(
-      appPageRouteTransition(
-        builder: builder, 
-        settings: settings
-      )
-    );
-
-  }
-
   /// Transição de páginas/rotas padrão da app 
-  static Route<R> appPageRouteTransition<R extends PageRoute>(
+  static Route<R> appRouteTransition<R>(
     {required WidgetBuilder builder, RouteSettings? settings}) {
 
     return PageRouteTransition.customized<R>(
@@ -87,17 +73,17 @@ abstract class AppRoutes {
 
   static RouteFactory get onGenerateRoute => (RouteSettings settings) {
 
-    return appPageRouteTransition<ScreenRouteBuilder>(
+    return appRouteTransition<ScreenRouteBuilder>(
       builder: _listRoutes
         .singleWhere(
           (routeModel) => routeModel._name == settings.name,
-          orElse: () => RouteModel._(settings.name!, RouteManager.onUnKnowRouteBuilder),
+          orElse: () => RouteModel._(settings.name ?? 'undefined', RouteManager.onUnKnowRouteBuilder),
         )._builder,
       settings: settings
     );
 
   };
-  
+
 }
 
 
