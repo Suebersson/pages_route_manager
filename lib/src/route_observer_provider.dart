@@ -36,11 +36,8 @@ typedef DidReplaceFunction = void Function({Route? newRoute, Route? oldRoute});
 /// funções quando uma transição de ocorrer, posibilitando passar apenas
 /// as funções que necessárias de ocordo com as necessidades do desenvolvimento
 class RouteObserverProvider extends NavigatorObserver {
-  final DidFunction? didPush_;
   final DidReplaceFunction? didReplace_;
-  final DidFunction? didPop_;
-  final DidFunction? didRemove_;
-  final DidFunction? didStartUserGesture_;
+  final DidFunction? didPush_, didPop_, didRemove_, didStartUserGesture_;
   final void Function()? didStopUserGesture_;
 
   RouteObserverProvider(

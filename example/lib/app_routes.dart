@@ -75,7 +75,7 @@ abstract class AppRoutes {
 
     return appRouteTransition<ScreenRouteBuilder>(
       builder: _listRoutes
-        .singleWhere(
+        .firstWhere(
           (routeModel) => routeModel._name == settings.name,
           orElse: () => RouteModel._(settings.name ?? 'undefined', RouteManager.onUnKnowRouteBuilder),
         )._builder,

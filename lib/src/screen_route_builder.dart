@@ -33,19 +33,10 @@ class ScreenRouteBuilder<T> extends PageRoute<T> {
   final TransitionsBuilder transitionsBuilder;
 
   @override
-  final Duration transitionDuration;
+  final Duration transitionDuration, reverseTransitionDuration;
 
   @override
-  final Duration reverseTransitionDuration;
-
-  @override
-  final bool opaque;
-
-  @override
-  final bool barrierDismissible;
-
-  @override
-  final bool maintainState;
+  final bool opaque, barrierDismissible, maintainState;
 
   @override
   final Color? barrierColor;

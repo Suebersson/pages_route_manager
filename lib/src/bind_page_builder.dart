@@ -27,8 +27,7 @@ class BindPageBuilder<B> extends StatefulWidget {
 
   final WidgetBuilder builder;
   final B Function() controller;
-  final bool sigleton;
-  final bool lazy;
+  final bool sigleton, lazy;
 
   static final Map<String, Object> _bindings = {};
 
