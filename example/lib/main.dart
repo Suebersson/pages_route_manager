@@ -11,12 +11,27 @@ class StartApp extends StatelessWidget {
     return MaterialApp(
       title: 'Teste route manager',
       theme: ThemeData(
-        primaryColor: Colors.blue
+        primaryColor: Colors.blue,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: PlatformPageTransitionsBuilder(
+              transitionType: TransitionType.slideWithScaleRightToLeft, 
+            ),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.linux: PlatformPageTransitionsBuilder(
+              transitionType: TransitionType.slideWithScaleRightToLeft, 
+            ),
+            TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.windows: PlatformPageTransitionsBuilder(
+              transitionType: TransitionType.slideWithScaleRightToLeft, 
+            ),
+          }
+        ),
       ),
       initialRoute: RouteName.homePage.name,
       navigatorObservers: [RouteManager.routeManagerWatcher],
-      onGenerateRoute: AppRoutes.onGenerateRoute,
+      onGenerateRoute: CreatePageRoute.onGenerateRoute,
       onUnknownRoute: RouteManager.onUnknownRoute,
-    ).setAppRouteTransition(AppRoutes.appRouteTransition);
+    ).setAppRouteTransition(appRouteTransition);
   }
 }

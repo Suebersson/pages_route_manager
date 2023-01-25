@@ -1,4 +1,4 @@
-part of './route_manager.dart';
+part of '../route_manager.dart';
 
 /// Widget responsável pela animação definida na transição das rostas
 @immutable
@@ -116,6 +116,11 @@ class WidgetTransitionAnimation<T> extends StatelessWidget {
       case TransitionType.slideWithFadeBottomToTop:
       case TransitionType.slideWithFadeLeftToRight:
       case TransitionType.slideWithFadeRightToLeft:
+
+        /// slide + Fade é a Transição[FadeUpwardsPageTransitionsBuilder] padrão do flutter
+        ///  aplicada as plataformas [TargetPlatform.android], [TargetPlatform.linux], [TargetPlatform.windows]
+        ///
+        /// A difereça são as propriedades usadas: [Offset], [Curves]
         return SlideTransition(
           position: animation.drive(
               Tween(begin: _getOffset(transitionType), end: Offset.zero)

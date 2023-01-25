@@ -1,5 +1,66 @@
 library app_route;
 
+import 'dart:io' show Platform;
+import 'package:flutter/cupertino.dart';
+import 'package:pages_route_manager/pages_route_manager.dart';
+
+import './pages/home_page.dart';
+import './pages/any_page.dart';
+
+/// Unir [RouteName] com a package [RouteManager]
+export 'package:pages_route_manager/pages_route_manager.dart';
+export 'app_routes.dart';
+
+abstract class RouteName{
+
+  static final CreatePageRoute homePage = CreatePageRoute('/', (_) => const HomePage());
+
+  static final CreatePageRoute anyPage = CreatePageRoute('/anyPage', (_) => const AnyPage());
+
+}
+
+
+/// Transição de páginas/rotas padrão da app 
+RouteTransionFunction get appRouteTransition {
+  /// [TargetPlatform.android], [TargetPlatform.windows], [TargetPlatform.linux]
+  if (Platform.isAndroid || Platform.isWindows || Platform.isLinux) {
+    return materialAppRouteTransition;
+  } else {
+  /// [TargetPlatform.IOS], [TargetPlatform.macOS]
+    return cupertinoAppRouteTransition;
+  }
+}
+
+Route<R> materialAppRouteTransition<R>(
+  {required WidgetBuilder builder, RouteSettings? settings}) {
+    return ScreenRouteBuilder(
+      builder: builder,
+      settings: settings,
+    );
+}
+
+Route<R> cupertinoAppRouteTransition<R>(
+  {required WidgetBuilder builder, RouteSettings? settings}) {
+    return CupertinoPageRoute(
+      builder: builder,
+      settings: settings,
+    );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+library app_route;
+
 import 'package:flutter/widgets.dart';
 import 'package:pages_route_manager/pages_route_manager.dart';
 
@@ -12,63 +73,67 @@ export 'app_routes.dart';
 
 abstract class RouteName{
 
-  static final RouteModel homePage = RouteModel('/', (_) => const HomePage());
+  static final CreatePageRoute homePage = CreatePageRoute('/', (_) => const HomePage());
 
-  static final RouteModel anyPage = RouteModel('/anyPage', (_) => const AnyPage());
+  static final CreatePageRoute anyPage = CreatePageRoute('/anyPage', (_) => const AnyPage());
 
 }
 
 @immutable
-class RouteModel {
+class CreatePageRoute {
 
   final String _name;
   final WidgetBuilder _builder;
 
   // Para criar as rotas, devemos usar apenas o construtor factory e não esse construtor privado
-  const RouteModel._(this._name, this._builder);
+  const CreatePageRoute._(this._name, this._builder);
 
-  factory RouteModel(String name, WidgetBuilder builder){
-    return RouteModel._(name, builder)._addRoute();
+  factory CreatePageRoute(String name, WidgetBuilder builder){
+    return CreatePageRoute._(name, builder)._addRoute();
   }
 
 }
 
-extension RouteAttributes on RouteModel {
+extension RouteAttributes on CreatePageRoute {
 
   String get name => _name;
   WidgetBuilder get builder => _builder;
 
-  RouteModel _addRoute() {
+  CreatePageRoute _addRoute() {
     AppRoutes._listRoutes.add(this);
     return this;
   }
 
 }
 
-/// Essa estrutura de código nos possibilita adicionar as rotas usando o objeto [RouteModel]
+/// Essa estrutura de código nos possibilita adicionar as rotas usando o objeto [CreatePageRoute]
 /// dentro de [RouteName] sem precisar reescrever(repetir) o nome[String] e o construtor[WidgetBuilder]
-/// em outras classes ou objetos. Basta apenas criar uma instância de [RouteModel] dentro de [RouteName]
+/// em outras classes ou objetos. Basta apenas criar uma instância de [CreatePageRoute] dentro de [RouteName]
 /// 
 /// E na medida que o número de rotas aumente na app, o objeto onGenerateRoute[RouteFactory]
 /// é dinâmico e não precisar ser alterado(fazer uma implementação)
 abstract class AppRoutes {
 
-  static final List<RouteModel> _listRoutes = [];
-  static List<RouteModel> get listRoutes => [..._listRoutes];
+  static final List<CreatePageRoute> _listRoutes = [];
+  static List<CreatePageRoute> get listRoutes => [..._listRoutes];
 
   /// Transição de páginas/rotas padrão da app 
   static Route<R> appRouteTransition<R>(
     {required WidgetBuilder builder, RouteSettings? settings}) {
 
-    return PageRouteTransition.customized<R>(
+    // return PageRouteTransition.customized<R>(
+    //   builder: builder,
+    //   settings: settings,
+    //   transitionType: TransitionType.theme
+    // );
+
+    // return CupertinoPageRoute(
+    // return MaterialPageRoute( 
+    return ScreenRouteBuilder(
       builder: builder,
       settings: settings
     );
-
-    // return MaterialPageRoute( //CupertinoPageRoute
-    //   builder: builder,
-    //   settings: settings
-    // );
+    
   }
 
   static RouteFactory get onGenerateRoute => (RouteSettings settings) {
@@ -76,8 +141,8 @@ abstract class AppRoutes {
     return appRouteTransition<ScreenRouteBuilder>(
       builder: _listRoutes
         .firstWhere(
-          (routeModel) => routeModel._name == settings.name,
-          orElse: () => RouteModel._(settings.name ?? 'undefined', RouteManager.onUnKnowRouteBuilder),
+          (CreatePageRoute) => CreatePageRoute._name == settings.name,
+          orElse: () => CreatePageRoute._(settings.name ?? 'undefined', RouteManager.onUnKnowRouteBuilder),
         )._builder,
       settings: settings
     );
@@ -85,6 +150,14 @@ abstract class AppRoutes {
   };
 
 }
+
+*/
+
+
+
+
+
+
 
 
 

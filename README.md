@@ -6,19 +6,31 @@
 - navigator
 - modalRoute
 - getArgument
+- focusScopeNode
 
 <br />
 <br />
 
-### Componentes e objetos
+
+### Componentes e Objetos
 - RouteManager => Tem os métodos e atributos necessários para gerenciar as rotas 
-- BindPageBuilder => [Widget], usado para acoplar uma instância de um [Object] para um outro [Widget] (página) filho usar como uma dependência (uma cotroller)
-- UnKnowRouteBuilder => [Widget], usado para exibir uma página quando uma rota nomeda não existir
 - ScreenRouteBuilder => [PageRoute], objeto criado para navegar para uma página usando uma [WidgetBuilder]
-- WidgetTransitionAnimation => [Widget], Todas as animações de transição de rotas
 - RouteObserverProvider => [RouteObserver], Modelo para criar um objeto
 - PageRouteTransition => Funções que retornam um objeto [Rote] para navegar entre páginas[Widget]
 - TransitionType => Contém todos os tipos de animações para transição de rotas e suas variações
+- PlatformPageTransitionsBuilder => Objeto facilitador para definir a animação de transição de rotas no tema da app
+- RouteNavigator => Contém funções abstratas do objeto[Navigator] para navegação de rotas
+- CreatePageRoute => Usado para criar rotas de página
+
+<br />
+<br />
+
+
+### Widgets
+- BindPageBuilder => usado para acoplar uma instância de um [Object] para um outro [Widget] (página) filho usar como uma dependência (uma cotroller)
+- UnKnowRouteBuilder => usado para exibir uma página quando uma rota nomeda não existir
+- StatelessArgument => criar uma página e carregar o argumento já convertido(cast)
+- WidgetTransitionAnimation ==> widgtes que contém todas as animações de transição de rotas
 
 <br />
 <br />
@@ -41,17 +53,19 @@ RouteManager.currentNavigator?.pushNamed(
 );
 
 // Sem o contexto usando o navigator da página ativa
-RouteManager.push(
+RouteNavigator.push(
   builder: (_) => const AnyPage(), 
   settings: const RouteSettings(name: 'Page2', arguments: 'argument')
 );
 
 // Sem o contexto usando o navigator da página ativa
-RouteManager.pushNamed(
+RouteName.anyPage.push();
+
+// Sem o contexto usando o navigator da página ativa
+RouteNavigator.pushNamed(
   routeName: RouteName.anyPage.name,
   arguments: 'argument'
 );
-
 
 // Persolanizando uma animação para transição de uma página
 //Navigator.of(context).push(
@@ -93,7 +107,7 @@ context.navigator.push(
 // Para ver o exemplo de uso organizado por pasta e arquivos 
 // acesse o projeto de exemplo dentro da package ou o repositório no GitHub
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:pages_route_manager/pages_route_manager.dart';
 
 void main() => runApp(const StartApp());
@@ -109,9 +123,9 @@ class StartApp extends StatelessWidget {
       ),
       initialRoute: RouteName.homePage,
       navigatorObservers: [RouteManager.routeManagerWatcher],
-      onGenerateRoute: AppRoutes.onGenerateRoute,
+      onGenerateRoute: CreatePageRoute.onGenerateRoute,
       onUnknownRoute: RouteManager.onUnknownRoute,
-    ).setAppRouteTransition(AppRoutes.appRouteTransition);
+    ),
   }
 }
 
@@ -128,11 +142,7 @@ class HomePage extends StatelessWidget {
           color: Theme.of(context).primaryColor.withOpacity(0.7),
           child: TextButton(
             onPressed: (){
-              /*Navigator.of(context).pushNamed(
-                RouteName.anyPage, 
-                arguments: 'data'
-              );*/
-              RouteManager.pushNamed(routeName: RouteName.anyPage.name);
+              RouteName.anyPage.push();
             }, 
             child: const Text(
               'AnyPage',
@@ -164,80 +174,11 @@ class AnyPage extends StatelessWidget {
   }
 }
 
-
 abstract class RouteName{
 
-  static final RouteModel homePage = RouteModel('/', (_) => const HomePage());
+  static final CreatePageRoute homePage = CreatePageRoute('/', (_) => const HomePage());
 
-  static final RouteModel anyPage = RouteModel('/anyPage', (_) => const AnyPage());
-
-}
-
-@immutable
-class RouteModel {
-
-  final String _name;
-  final WidgetBuilder _builder;
-
-  // Para criar as rotas, devemos usar apenas o construtor factory e não esse construtor privado
-  const RouteModel._(this._name, this._builder);
-
-  factory RouteModel(String name, WidgetBuilder builder){
-    return RouteModel._(name, builder)._addRoute();
-  }
-
-}
-
-extension RouteAttributes on RouteModel {
-
-  String get name => _name;
-  WidgetBuilder get builder => _builder;
-
-  RouteModel _addRoute() {
-    AppRoutes._listRoutes.add(this);
-    return this;
-  }
-
-}
-
-/// Essa estrutura de código nos possibilita adicionar as rotas usando o objeto [RouteModel]
-/// dentro de [RouteName] sem precisar reescrever(repetir) o nome[String] e o construtor[WidgetBuilder]
-/// em outras classes ou objetos. Basta apenas criar uma instância de [RouteModel] dentro de [RouteName]
-/// 
-/// E na medida que o número de rotas aumente na app, o objeto onGenerateRoute[RouteFactory]
-/// é dinâmico e não precisar ser alterado(fazer uma implementação)
-abstract class AppRoutes {
-
-  static final List<RouteModel> _listRoutes = [];
-  static List<RouteModel> get listRoutes => [..._listRoutes];
-
-  /// Transição de páginas/rotas padrão da app 
-  static Route<R> appRouteTransition<R>(
-    {required WidgetBuilder builder, RouteSettings? settings}) {
-
-    return PageRouteTransition.customized<R>(
-      builder: builder,
-      settings: settings
-    );
-
-    // return MaterialPageRoute( //CupertinoPageRoute
-    //   builder: builder,
-    //   settings: settings
-    // );
-  }
-
-  static RouteFactory get onGenerateRoute => (RouteSettings settings) {
-
-    return appRouteTransition<ScreenRouteBuilder>(
-      builder: _listRoutes
-        .singleWhere(
-          (routeModel) => routeModel._name == settings.name,
-          orElse: () => RouteModel._(settings.name ?? 'undefined', RouteManager.onUnKnowRouteBuilder),
-        )._builder,
-      settings: settings
-    );
-
-  };
+  static final CreatePageRoute anyPage = CreatePageRoute('/anyPage', (_) => const AnyPage());
 
 }
 ```

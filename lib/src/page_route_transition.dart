@@ -71,6 +71,14 @@ abstract class PageRouteTransition {
   }
 
   static const Duration defaultTransitionDuration = Duration(milliseconds: 400);
+
+  static Route<R> _screenRouteBuilder<R>(
+      {required WidgetBuilder builder, RouteSettings? settings}) {
+    return ScreenRouteBuilder(
+      builder: builder,
+      settings: settings,
+    );
+  }
 }
 
 enum FlutterDefaultTransition {

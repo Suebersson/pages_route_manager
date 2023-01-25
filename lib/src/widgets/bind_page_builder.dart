@@ -1,4 +1,4 @@
-part of './route_manager.dart';
+part of '../route_manager.dart';
 
 extension ImplementPageBind on BuildContext {
   B getBind<B>() {

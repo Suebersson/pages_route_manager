@@ -1,6 +1,6 @@
 part of './route_manager.dart';
 
-class ScreenRouteBuilder<T> extends PageRoute<T> {
+class ScreenRouteBuilder<R> extends PageRoute<R> {
   /// Este objeto[ScreenRouteBuilder] do tipo [Route] é uma versão
   /// paralela(uma cópia) do objeto [PageRouteBuilder]
   ///
@@ -72,5 +72,7 @@ Widget _buildTransitionsFuction(
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child) {
-  return child;
+  return Theme.of(context)
+      .pageTransitionsTheme
+      .buildTransitions(route, context, animation, animation, child);
 }

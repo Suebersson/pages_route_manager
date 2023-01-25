@@ -1,15 +1,19 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoApp, CupertinoPageRoute;
 import 'package:flutter/material.dart';
 import 'package:dart_dev_utils/dart_dev_utils.dart' show printLog;
 import 'package:dependency_manager/dependency_manager.dart'
     show dependencyDispose;
 
-part './widget_transition_animation.dart';
+part './widgets/widget_transition_animation.dart';
+part './widgets/unknow_route_builder.dart';
+part './widgets/bind_page_builder.dart';
+part './widgets/stateless_argument.dart';
 part './route_observer_provider.dart';
-part './unknow_route_builder.dart';
 part './screen_route_builder.dart';
 part './page_route_transition.dart';
-part './bind_page_builder.dart';
+part './platform_page_transitions_builder.dart';
+part './create_page_route.dart';
+part './route_navigator.dart';
 
 /*
   Referências:
@@ -25,26 +29,39 @@ part './bind_page_builder.dart';
   - Fornecer um base de código para facilitar gerenciamento e controle de rotas da app
   - Fornecer animações na transição de rotas/páginas
   - Fornecer o objeto Navigator, que pissibilitará a navegação sem o contexto desde que a variável 
-    [RouteManager.routeManagerWatcher] esteja atribuida no [MaterialApp]
+    [RouteManager.routeManagerWatcher] esteja atribuida no [MaterialApp] >> [navigatorObservers]
 */
 
-extension ImplementFunction<T> on BuildContext {
+extension ImplementFunction on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
   Size get mediaQuerySize => mediaQuery.size;
   TargetPlatform get platform => Theme.of(this).platform;
   NavigatorState get navigator => Navigator.of(this);
-  ModalRoute<T>? get modalRoute => ModalRoute.of(this);
-  // ignore: avoid_shadowing_type_parameters
-  T? getArgument<T>() {
-    var arg = modalRoute?.settings.arguments;
-    if (arg == null) {
+  ModalRoute? get modalRoute => ModalRoute.of(this);
+  FocusScopeNode get focusScopeNode => FocusScope.of(this);
+
+  /// Fechar uma página/rota atual
+  void pop<O>([O? result]) => navigator.pop<O>(result);
+
+  /// Verificar se a página/rota pode ser fechada
+  bool get canPop => navigator.canPop();
+
+  /// Verificar se a página/rota pode ser fechada de acordo com o scopo
+  Future<bool> maybePop<O>([O? result]) => navigator.maybePop<O>(result);
+
+  /// Obter o argumento[Object] passado como parâmetro dentro de [RouteSettings]
+  /// para a rota de atual já convertido[cast]
+  O? getArgument<O>() {
+    RouteSettings? settings = modalRoute?.settings;
+
+    if (settings?.arguments is O) {
+      return settings?.arguments as O;
+    } else {
       printLog(
-        "O valor do argumento é nulo, verifique se o valor está sendo passado no parâmentro 'RouteSettings' para essa página",
-        name: 'RouteManager',
+        "O argumento é nulo, passe um [Object] nas propriedades 'settings' ou 'arguments' para essa página",
+        name: settings?.name ?? 'RouteManager',
       );
       return null;
-    } else {
-      return arg as T;
     }
   }
 }
@@ -70,8 +87,8 @@ abstract class RouteManager<O> {
 
   /// Função que retorna o objeto [Route] que será usado para todas as
   /// transições de páginas na app
-  static RouteTransionFunction get getAppDefaultRoutesTransition =>
-      _appDefaultRoutesTransition ?? PageRouteTransition.flutterDefault;
+  static RouteTransionFunction get appDefaultRoutesTransition =>
+      _appDefaultRoutesTransition ?? PageRouteTransition._screenRouteBuilder;
   static RouteTransionFunction? _appDefaultRoutesTransition;
 
   /// Observar as transições das rotas
@@ -90,6 +107,9 @@ abstract class RouteManager<O> {
     },
   );
 
+  /// Obter os dados da [Route] atual apenas se página tiver herança com [PageRoute]
+  /// [MaterialPageRoute], [CupertinoPageRoute], [PageRouteBuilder],
+  /// [ScreenRouteBuilder]
   static void _setNavigator(Route? route) {
     if (route is PageRoute) {
       _currentRoute = route;
@@ -125,42 +145,33 @@ abstract class RouteManager<O> {
     RouteManager._appDefaultRoutesTransition = function;
   }
 
-/* 
-========================================================================================
+  /// Comparar se as instâncias do [Navigator] de [RouteManager.currentNavigator]
+  /// e [Navigator.of] são iguais
+  ///
+  /// O parâmetro [contextNavigator] deve ser a função [Navigator.of] da página/rota atual
+  ///
+  static bool compareNavigators(NavigatorState contextNavigator) {
+    /// Essa função serve para verificar a confibilidade do objeto [RouteManager.currenteNavigator]
+    /// para ser usado na navegação das rotas, portanto, o mesmo é confiavel desde que os objetos
+    /// [Navigator] sejam iguais
+    ///
+    /// Chamada ==> RouteManager.compareNavigators(Navigator.of(context));
 
-  Exemplos de como usar, reescrever ou criar funções adaptadas para usar o objeto 
-  [Navigator], basta apenas usar a propriedade [currentNavigator]
+    printLog(
+        'Instância do RouteManager.navigator: ${currentNavigator.hashCode}',
+        name: 'RouteManager');
 
-========================================================================================
-*/
+    printLog('Instância do context.navigator: ${contextNavigator.hashCode}',
+        name: 'RouteManager');
 
-  /// Navegar para um página[Widget]
-  static Future<O?> push<O extends Object?>(
-      {required WidgetBuilder builder, RouteSettings? settings}) async {
-    return currentNavigator?.push<O>(
-        getAppDefaultRoutesTransition(builder: builder, settings: settings));
-  }
-
-  /// Navegar para um página[Widget] nomeada
-  static Future<O?> pushNamed<O extends Object?>(
-      {required String routeName, Object? arguments}) async {
-    return currentNavigator?.pushNamed<O>(routeName, arguments: arguments);
-  }
-
-  /// Fechar uma página
-  static void pop<O extends Object?>([O? result]) {
-    currentNavigator?.pop<O>(result);
-  }
-
-  /// Verificar se a página pode ser fechada
-  static bool get canPop {
-    // assert(currentState != null, "O objeto 'currentNavigator' é null");
-    return currentNavigator?.canPop() ?? false;
-  }
-
-  static Future<bool> maybePop<O extends Object?>([O? result]) {
-    // assert(currentState != null, "O objeto 'currentNavigator' é null");
-    return currentNavigator?.maybePop<O>(result) ?? Future.value(false);
+    if (identical(currentNavigator, contextNavigator) &&
+        currentNavigator.hashCode == contextNavigator.hashCode) {
+      printLog('Resultado: as instâncias são iguais', name: 'true');
+      return true;
+    } else {
+      printLog('Resultado: as instâncias são diferentes', name: 'false');
+      return false;
+    }
   }
 }
 
@@ -180,5 +191,23 @@ extension SetRouteTransitionC on CupertinoApp {
   CupertinoApp setAppRouteTransition(RouteTransionFunction function) {
     RouteManager._appDefaultRoutesTransition = function;
     return this;
+  }
+}
+
+/// Obter o argumento[Object] passado como parâmetro dentro de [RouteSettings]
+/// para a rota de atual já convertido[cast]
+O? getArgument<O>() {
+  // Essa função é global para que o argumento possa ser acessado sem o contexto,
+  // dentro ou fora dos objetos [StatelessWidget] e [StatefulWidget], sem ser
+  // [static] para que não gerar erro no desenvolvimento
+
+  if (RouteManager._currentRouteSettings?.arguments is O) {
+    return RouteManager._currentRouteSettings?.arguments as O;
+  } else {
+    printLog(
+      "O argumento é nulo, passe um [Object] nas propriedades 'settings' ou 'arguments' para essa página",
+      name: RouteManager._currentRouteSettings?.name ?? 'RouteManager',
+    );
+    return null;
   }
 }

@@ -1,5 +1,5 @@
-import 'package:example/pages/any_page.dart';
 import 'package:flutter/material.dart';
+// import './any_page.dart';
 import '../app_routes.dart';
 
 class HomePage extends StatelessWidget {
@@ -40,15 +40,17 @@ class HomePage extends StatelessWidget {
               //   arguments: 'argument'
               // );
 
+              RouteName.anyPage.push();
+
               // Persolanizando uma animação para transição de uma página
-              //Navigator.of(context).push(
-              context.navigator.push(
-                PageRouteTransition.customized(
-                  builder: (_) => const AnyPage(),
-                  transitionDuration: const Duration(milliseconds: 400),
-                  transitionType: TransitionType.fade
-                )
-              );
+              // //Navigator.of(context).push(
+              // context.navigator.push(
+              //   PageRouteTransition.customized(
+              //     builder: (_) => const AnyPage(),
+              //     transitionDuration: const Duration(milliseconds: 400),
+              //     transitionType: TransitionType.fade
+              //   )
+              // );
 
               // Como essa função é possível escolher a transição 
               // [MaterialPageRoute] ou [CupertinoPageRoute]
