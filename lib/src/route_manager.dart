@@ -40,15 +40,6 @@ extension ImplementFunction on BuildContext {
   ModalRoute? get modalRoute => ModalRoute.of(this);
   FocusScopeNode get focusScopeNode => FocusScope.of(this);
 
-  /// Fechar uma página/rota atual
-  void pop<O>([O? result]) => navigator.pop<O>(result);
-
-  /// Verificar se a página/rota pode ser fechada
-  bool get canPop => navigator.canPop();
-
-  /// Verificar se a página/rota pode ser fechada de acordo com o scopo
-  Future<bool> maybePop<O>([O? result]) => navigator.maybePop<O>(result);
-
   /// Obter o argumento[Object] passado como parâmetro dentro de [RouteSettings]
   /// para a rota de atual já convertido[cast]
   O? getArgument<O>() {

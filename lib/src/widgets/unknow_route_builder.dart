@@ -21,7 +21,7 @@ class UnKnowRouteBuilder extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 20.0, top: 25.0),
               child: Text(
-                ModalRoute.of(context)?.settings.name ?? 'UnKnowRoute',
+                context.modalRoute?.settings.name ?? 'UnKnowRoute',
                 style: style,
               ),
             ),
@@ -41,7 +41,7 @@ class UnKnowRouteBuilder extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       IconButton(
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () => context.navigator.pop(),
                         icon: Icon(
                           Icons.arrow_back,
                           color: style.color,

@@ -6,6 +6,7 @@ import 'package:pages_route_manager/pages_route_manager.dart';
 
 import './pages/home_page.dart';
 import './pages/any_page.dart';
+import './pages/login.dart';
 
 /// Unir [RouteName] com a package [RouteManager]
 export 'package:pages_route_manager/pages_route_manager.dart';
@@ -13,7 +14,13 @@ export 'app_routes.dart';
 
 abstract class RouteName{
 
-  static final CreatePageRoute homePage = CreatePageRoute('/', (_) => const HomePage());
+  // static final CreatePageRoute homePage = CreatePageRoute('/', (_) => const HomePage());
+  static final CreatePageRoute homePage = CreatePageRoute.initialRoute(
+    homePageBuilder: (_) => const HomePage(),
+    alternativeBuilder: (_) => const Login(),
+    initialRouteTest: computerTest
+  );
+
 
   static final CreatePageRoute anyPage = CreatePageRoute('/anyPage', (_) => const AnyPage());
 

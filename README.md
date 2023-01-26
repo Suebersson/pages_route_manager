@@ -14,12 +14,12 @@
 
 ### Componentes e Objetos
 - RouteManager => Tem os métodos e atributos necessários para gerenciar as rotas 
+- RouteNavigator => Contém funções abstratas do objeto[Navigator] para navegação de rotas
 - ScreenRouteBuilder => [PageRoute], objeto criado para navegar para uma página usando uma [WidgetBuilder]
 - RouteObserverProvider => [RouteObserver], Modelo para criar um objeto
 - PageRouteTransition => Funções que retornam um objeto [Rote] para navegar entre páginas[Widget]
 - TransitionType => Contém todos os tipos de animações para transição de rotas e suas variações
 - PlatformPageTransitionsBuilder => Objeto facilitador para definir a animação de transição de rotas no tema da app
-- RouteNavigator => Contém funções abstratas do objeto[Navigator] para navegação de rotas
 - CreatePageRoute => Usado para criar rotas de página
 
 <br />
