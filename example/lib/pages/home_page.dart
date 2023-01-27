@@ -4,6 +4,10 @@ import '../app_routes.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({ Key? key }) : super(key: key);
+
+  static WidgetBuilder get rote => (_) => const HomePage();
+  static String get name => '/';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

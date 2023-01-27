@@ -4,6 +4,10 @@ import '../app_routes.dart';
 
 class AnyPage extends StatelessWidget {
   const AnyPage({ Key? key }) : super(key: key);
+
+  static WidgetBuilder get rote => (_) => const AnyPage();
+  static String get name => '/anyPage';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

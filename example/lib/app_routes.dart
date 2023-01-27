@@ -16,13 +16,13 @@ abstract class RouteName{
 
   // static final CreatePageRoute homePage = CreatePageRoute('/', (_) => const HomePage());
   static final CreatePageRoute homePage = CreatePageRoute.initialRoute(
-    homePageBuilder: (_) => const HomePage(),
-    alternativeBuilder: (_) => const Login(),
+    homePageBuilder: HomePage.rote,
+    alternativeBuilder: Login.rote,
     initialRouteTest: computerTest
   );
 
 
-  static final CreatePageRoute anyPage = CreatePageRoute('/anyPage', (_) => const AnyPage());
+  static final CreatePageRoute anyPage = CreatePageRoute(AnyPage.name, AnyPage.rote);
 
 }
 

@@ -14,6 +14,10 @@ bool computerTest () {
 
 class Login extends StatelessWidget {
   const Login({ Key? key }) : super(key: key);
+
+  static WidgetBuilder get rote => (_) => const Login();
+  static String get name => '/';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

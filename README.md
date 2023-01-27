@@ -121,7 +121,7 @@ class StartApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.blue
       ),
-      initialRoute: RouteName.homePage,
+      initialRoute: RouteName.homePage.name,
       navigatorObservers: [RouteManager.routeManagerWatcher],
       onGenerateRoute: CreatePageRoute.onGenerateRoute,
       onUnknownRoute: RouteManager.onUnknownRoute,
