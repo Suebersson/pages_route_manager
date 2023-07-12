@@ -19,3 +19,8 @@
 </br>
 
 ## 1.0.4 Implementação do construtor[CreatePageRoute.initialRoute] factory para computar qual página/rota a app deve exibir ao inicializar 
+
+</br>
+</br>
+
+## 1.0.5 Implementação da função estatica [CreatePageRoute.createPageRoutesFromMapRoutes] e uma extension[CreatePageRoutesFromMapRoutes]

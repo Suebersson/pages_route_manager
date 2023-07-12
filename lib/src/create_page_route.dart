@@ -45,6 +45,12 @@ class CreatePageRoute {
     return CreatePageRoute._(name, builder)._addRoute();
   }
 
+  static void createPageRoutesFromMapRoutes(Map<String, WidgetBuilder> routes) {
+    routes.forEach((routeName, builder) {
+      CreatePageRoute(routeName, builder);
+    });
+  }
+
   /// Regras para criar uma rota
   static void _rulesCreatingRoute(String name) {
     // não permitir o nome de uma routa com string vazia
@@ -130,6 +136,15 @@ class CreatePageRoute {
         return RouteManager.appDefaultRoutesTransition(
             builder: settings.getBuilder, settings: settings);
       };
+}
+
+extension CreatePageRoutesFromMapRoutes on Map<String, WidgetBuilder> {
+  /// Definir e criar as rotas para o gerenciador [RouteManager] > [CreatePageRoute]
+  Map<String, WidgetBuilder> createPageRoutesFromMapRoutes() {
+    CreatePageRoute.createPageRoutesFromMapRoutes(this);
+
+    return this;
+  }
 }
 
 extension GetBuilder on RouteSettings {

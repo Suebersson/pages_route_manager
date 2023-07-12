@@ -7,6 +7,8 @@
 - modalRoute
 - getArgument
 - focusScopeNode
+- defaultTextStyle
+- iconTheme
 
 <br />
 <br />

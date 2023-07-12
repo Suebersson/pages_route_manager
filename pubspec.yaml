@@ -1,6 +1,6 @@
 name: pages_route_manager
 description: Package simplificado para gerenciamento de rotas de páginas para app flutter.
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/Suebersson/pages_route_manager.git
 repository: https://github.com/Suebersson/pages_route_manager
 
@@ -13,15 +13,15 @@ repository: https://github.com/Suebersson/pages_route_manager
 # git push -u origin main
 
 environment:
-  sdk: ">=2.16.1 <3.0.0"
+  sdk: ">=2.16.1 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  dependency_manager: ^1.0.1
-  dart_dev_utils: ^1.1.3
+  dependency_manager: ^1.0.3
+  dart_dev_utils: ^1.1.4
 
 dev_dependencies:
   flutter_test:

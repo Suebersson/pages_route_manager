@@ -39,6 +39,8 @@ extension ImplementFunction on BuildContext {
   NavigatorState get navigator => Navigator.of(this);
   ModalRoute? get modalRoute => ModalRoute.of(this);
   FocusScopeNode get focusScopeNode => FocusScope.of(this);
+  DefaultTextStyle get defaultTextStyle => DefaultTextStyle.of(this);
+  IconThemeData get iconTheme => IconTheme.of(this);
 
   /// Obter o argumento[Object] passado como parâmetro dentro de [RouteSettings]
   /// para a rota de atual já convertido[cast]

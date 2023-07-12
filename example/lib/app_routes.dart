@@ -15,6 +15,7 @@ export 'app_routes.dart';
 abstract class RouteName{
 
   // static final CreatePageRoute homePage = CreatePageRoute('/', (_) => const HomePage());
+
   static final CreatePageRoute homePage = CreatePageRoute.initialRoute(
     homePageBuilder: HomePage.rote,
     alternativeBuilder: Login.rote,
