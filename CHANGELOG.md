@@ -24,3 +24,8 @@
 </br>
 
 ## 1.0.5 Implementação da função estatica [CreatePageRoute.createPageRoutesFromMapRoutes] e uma extension[CreatePageRoutesFromMapRoutes]
+
+</br>
+</br>
+
+## 1.0.6 Implementação da variável [ RouteManager > onUnKnowRoutePageNotFound ]

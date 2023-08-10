@@ -129,9 +129,12 @@ abstract class RouteManager<O> {
         );
       };
 
+  /// Definir página que exibida quando a rota não for encontrada
+  static WidgetBuilder? onUnKnowRoutePageNotFound;
+
   /// Widget/página pronta ser usado na propriedade [onUnknownRoute] do [MaterialApp]
   static WidgetBuilder get onUnKnowRouteBuilder =>
-      (_) => const UnKnowRouteBuilder();
+      onUnKnowRoutePageNotFound ?? (_) => const UnKnowRouteBuilder();
 
   /// Definir transição de rotas/páginas da app
   static void setAppRouteTransition(RouteTransionFunction function) {
