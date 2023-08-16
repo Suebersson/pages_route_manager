@@ -78,6 +78,12 @@ abstract class RouteManager<O> {
   static RouteSettings? get currentRouteSettings => _currentRouteSettings;
   static RouteSettings? _currentRouteSettings;
 
+  static String? get currentRouteName => _currentRouteName;
+  static String? _currentRouteName;
+
+  static String get previousRouteName => _previousRouteName;
+  static String _previousRouteName = '';
+
   /// Função que retorna o objeto [Route] que será usado para todas as
   /// transições de páginas na app
   static RouteTransionFunction get appDefaultRoutesTransition =>
@@ -87,26 +93,27 @@ abstract class RouteManager<O> {
   /// Observar as transições das rotas
   static final NavigatorObserver routeManagerWatcher = RouteObserverProvider(
     didPush_: ({required Route route, Route? previousRoute}) {
-      _setNavigator(route);
+      _setNavigator(route, previousRoute);
     },
     didPop_: ({required Route route, Route? previousRoute}) {
-      _setNavigator(previousRoute);
+      _setNavigator(previousRoute, route);
     },
     didReplace_: ({Route? newRoute, Route? oldRoute}) {
-      _setNavigator(newRoute);
+      _setNavigator(newRoute, oldRoute);
     },
     didRemove_: ({required Route route, Route? previousRoute}) {
-      _setNavigator(route);
+      _setNavigator(route, previousRoute);
     },
   );
 
   /// Obter os dados da [Route] atual apenas se página tiver herança com [PageRoute]
   /// [MaterialPageRoute], [CupertinoPageRoute], [PageRouteBuilder],
   /// [ScreenRouteBuilder]
-  static void _setNavigator(Route? route) {
+  static void _setNavigator(Route? route, [Route? previousRoute]) {
     if (route is PageRoute) {
       _currentRoute = route;
       _currentRouteSettings = route.settings;
+      _currentRouteName = route.settings.name;
 
       if (route.isFirst) {
         _rootNavigator = route.navigator;
@@ -115,18 +122,28 @@ abstract class RouteManager<O> {
         _currentNavigator = route.navigator;
       }
     }
+
+    /// Obter o nome da rota anterior
+    if (previousRoute is PageRoute) {
+      _previousRouteName = previousRoute.settings.name ?? '';
+    }
   }
 
   /// Página que será exibida quando o rota for desconhecida ou não existir.
   ///
   /// Este objeto só será chamado apenas se a propriedade [MaterialApp.routes] for definida
   static RouteFactory get onUnknownRoute => (RouteSettings settings) {
-        return PageRouteTransition.customized(
-          builder: onUnKnowRouteBuilder,
-          settings: settings,
-          transitionType: TransitionType.scaleCenter,
-          curve: Curves.elasticInOut,
-        );
+        if (_appDefaultRoutesTransition == null) {
+          return PageRouteTransition.customized(
+            builder: onUnKnowRouteBuilder,
+            settings: settings,
+            transitionType: TransitionType.scaleCenter,
+            curve: Curves.elasticInOut,
+          );
+        } else {
+          return appDefaultRoutesTransition(
+              builder: settings.getBuilder, settings: settings);
+        }
       };
 
   /// Definir página que exibida quando a rota não for encontrada

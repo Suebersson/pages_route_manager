@@ -29,3 +29,8 @@
 </br>
 
 ## 1.0.6 Implementação da variável [ RouteManager > onUnKnowRoutePageNotFound ]
+
+</br>
+</br>
+
+## 1.0.7 Implementação no get [RouteManager.onUnknownRoute], o objeto [RouteManager.routeManagerWatcher] armazena o nome da rota anterior
