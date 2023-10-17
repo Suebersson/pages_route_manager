@@ -174,6 +174,11 @@ extension CreatePageRouteMethods on CreatePageRoute {
         settings: RouteSettings(name: _name, arguments: argument));
   }
 
+  /// Fechar a página/rota atual
+  void pop<O extends Object?>([O? result]) {
+    return RouteNavigator.pop<O>(result);
+  }
+
   /// Substituir a página/rota atual por essa rota
   Future<O?> pushReplacement<O, TO>({Object? argument, TO? result}) async {
     return RouteNavigator.pushReplacement<O, TO>(
